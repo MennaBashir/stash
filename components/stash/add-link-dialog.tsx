@@ -113,7 +113,9 @@ function AddLinkForm({
   const [embedUrl, setEmbedUrl] = useState<string | undefined>(editing?.embedUrl);
   const [kind, setKind] = useState<"video" | "article">(editing?.kind ?? "article");
   const [categoryId, setCategoryId] = useState<string>(
-    editing?.categoryId ?? defaultCategoryId ?? ""
+    editing?.categoryId ??
+    defaultCategoryId ??
+    (categories.length > 0 ? String(categories[0].id) : "")
   );
   const [fetchStatus, setFetchStatus] = useState<MetaStatus | null>(null);
 
