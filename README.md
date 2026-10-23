@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stash — save it for later
+
+A personal save-for-later queue: collect videos and articles you want to watch
+or read, organize them in categories, check them off when done, and see your
+progress add up everywhere.
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
+- **Tailwind CSS v4** + **shadcn/ui** + **lucide-react** + **framer-motion**
+- Data lives in your browser (`localStorage`) — no accounts, no database
+- Pasting a URL auto-fetches title, description, favicon, and thumbnail via the
+  `/api/metadata` serverless route (with YouTube/Vimeo detection and embeds)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000), then click **Add sample
+data** on the empty screen to explore the app instantly.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Categories with per-category progress (`3/8 watched`) and one-click
+  create/rename/delete (with color swatches)
+- Add a link: paste URL → metadata is fetched and previewed live → editable
+  title/description → pick category → save; falls back to manual entry when a
+  page can’t be fetched
+- Checkbox marks an item done; per-category bars and the overall count/percent
+  update immediately
+- Search + `All / To watch / Done` filters, delete with **Undo** toast
+- Light and dark mode, mobile drawer navigation, empty and loading states
+  throughout
 
-## Learn More
+## Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+No environment variables or setup needed — the app works on the free Hobby
+plan.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Option 1 — CLI
+npm i -g vercel
+vercel        # preview
+vercel --prod # production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Option 2 — Git
+# push this folder to GitHub, then import it at https://vercel.com/new
+```
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Note: your stash is stored per browser. Since data is on-device, the deployed
+> app keeps each browser’s data separate.
