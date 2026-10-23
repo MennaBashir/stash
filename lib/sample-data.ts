@@ -56,13 +56,6 @@ function sampleState(): StashState {
     items: [
       {
         categoryId: "seed-cat-watch",
-        url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        title: "Rick Astley — Never Gonna Give You Up",
-        description: "",
-        ageDays: 1,
-      },
-      {
-        categoryId: "seed-cat-watch",
         url: "https://vimeo.com/76979871",
         title: "The New Vimeo Player",
         description: "",

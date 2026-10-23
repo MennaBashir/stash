@@ -6,11 +6,6 @@ const OUT_DIR = "tools/.video";
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-async function waitVideoReady(page) {
-  // wait until the network is idle-ish after navigation
-  await page.waitForLoadState("networkidle");
-}
-
 async function addLinkDemo(page) {
   await page.getByRole("button", { name: "Add link" }).click();
   await page.waitForTimeout(900);

@@ -22,9 +22,8 @@ export function SmartThumb({
   const [stage, setStage] = useState<"image" | "favicon" | "tile">(
     image ? "image" : favicon ? "favicon" : "tile"
   );
-  const [hasFavicon, setHasFavicon] = useState(Boolean(favicon));
 
-  if (stage === "tile" || !hasFavicon) {
+  if (stage === "tile") {
     return (
       <div
         aria-hidden="true"
@@ -53,8 +52,8 @@ export function SmartThumb({
         className
       )}
       onError={() => {
-        if (stage === "image" && hasFavicon) setStage("favicon");
-        else setHasFavicon(false);
+        if (stage === "image" && favicon) setStage("favicon");
+        else setStage("tile");
       }}
     />
   );
