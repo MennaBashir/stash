@@ -6,14 +6,14 @@ const OUT_DIR = "tools/.video";
 
 mkdirSync(OUT_DIR, { recursive: true });
 
-async function addLinkDemo(page) {
+async function addLinkDemo(page, categoryId) {
   await page.getByRole("button", { name: "Add link" }).click();
   await page.waitForTimeout(900);
 
   const dialog = page.getByRole("dialog");
 
   // paste URL → auto-fetch fires after 550ms debounce
-  await page.locator("#stash-url").fill("https://nextjs.org");
+  await page.locator("#stash-url").fill("https://lnkd.in/p/eZA-kb4d");
   await page.waitForTimeout(450);
 
   // wait for fetch to finish (skeleton disappears / title filled)
@@ -26,8 +26,13 @@ async function addLinkDemo(page) {
   // safety: if metadata fetch failed, type a title so we can still save
   const titleValue = (await page.locator("#stash-title").inputValue()) ?? "";
   if (!titleValue.trim()) {
-    await page.locator("#stash-title").fill("Next.js — the React framework");
+    await page.locator("#stash-title").fill("LinkedIn post — saved for later");
   }
+
+  // pick the new category
+  await page.locator("#stash-category").click();
+  await page.getByRole("option", { name: "LinkedIn saved" }).click();
+  await page.waitForTimeout(600);
 
   await page.waitForTimeout(1000); // let the viewer absorb the preview
   await page.getByRole("button", { name: "Stash it" }).click();
@@ -60,27 +65,37 @@ async function main() {
   await page.locator("article").first().hover({ position: { x: 300, y: 150 } });
   await page.waitForTimeout(1400);
 
-  // ── 3) add-link flow with live metadata fetch
+  // ── 3) create a new category
+  await page.getByRole("button", { name: "New category" }).first().click();
+  await page.waitForTimeout(800);
+  const catDialog = page.getByRole("dialog");
+  await catDialog.getByRole("textbox").fill("LinkedIn saved");
+  await page.waitForTimeout(700);
+  await page.getByRole("button", { name: "Create" }).click();
+  await page.locator("text=LinkedIn saved").first().waitFor({ timeout: 10000 });
+  await page.waitForTimeout(1400);
+
+  // ── 4) add-link flow with live metadata fetch
   await addLinkDemo(page);
 
-  // ── 4) check two items off → progress animates
+  // ── 5) check two items off → progress animates
   const checkboxes = page.getByLabel(/^Mark .* as done$/);
   await checkboxes.first().click();
   await page.waitForTimeout(1100);
   await checkboxes.first().click();
   await page.waitForTimeout(1400);
 
-  // ── 5) switch filter to “Done”
+  // ── 6) switch filter to “Done”
   await page.getByRole("tab", { name: "Done" }).click();
   await page.waitForTimeout(1600);
   await page.getByRole("tab", { name: "All" }).click();
   await page.waitForTimeout(1200);
 
-  // ── 6) open a category
+  // ── 7) open a category
   await page.getByText("Watch later", { exact: true }).first().click();
   await page.waitForTimeout(1500);
 
-  // ── 7) dark mode
+  // ── 8) dark mode
   await page.getByRole("button", { name: "Toggle dark mode" }).click();
   await page.waitForTimeout(1600);
 
