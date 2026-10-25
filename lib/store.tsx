@@ -23,7 +23,7 @@ export type StashAction =
   | {
       type: "update-item";
       id: string;
-      patch: Partial<Pick<StashItem, "title" | "description" | "categoryId">>;
+      patch: Partial<Pick<StashItem, "title" | "description" | "categoryId" | "image">>;
     }
   | { type: "toggle-item"; id: string }
   | { type: "delete-item"; id: string };

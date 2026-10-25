@@ -108,7 +108,9 @@ function AddLinkForm({
   const [url, setUrl] = useState(editing?.url ?? "");
   const [title, setTitle] = useState(editing?.title ?? "");
   const [description, setDescription] = useState(editing?.description ?? "");
-  const [image, setImage] = useState<string | undefined>(editing?.image);
+  const [image, setImage] = useState<string | undefined>(
+    editing?.image ?? parseMedia(editing?.url ?? "").thumbnail
+  );
   const [favicon, setFavicon] = useState<string | undefined>(editing?.favicon);
   const [embedUrl, setEmbedUrl] = useState<string | undefined>(editing?.embedUrl);
   const [kind, setKind] = useState<"video" | "article">(editing?.kind ?? "article");
@@ -139,12 +141,12 @@ function AddLinkForm({
         return;
       }
       const meta = (await res.json()) as FetchedMeta;
+      const media = parseMedia(target);
       setTitle((current) => current || meta.title || "");
       setDescription((current) => current || meta.description || "");
-      if (meta.image) setImage(meta.image);
+      setImage((current) => current || media.thumbnail || (meta.image ?? undefined));
       if (meta.favicon) setFavicon(meta.favicon);
-      if (meta.embedUrl) setEmbedUrl(meta.embedUrl);
-      const media = parseMedia(target);
+      setEmbedUrl((current) => current || media.embedUrl || (meta.embedUrl ?? undefined));
       setKind(media.kind === "video" ? "video" : meta.kind);
       lastFetchedRef.current = target;
       setFetchStatus("ok");
@@ -186,7 +188,7 @@ function AddLinkForm({
       stashDispatch({
         type: "update-item",
         id: editing.id,
-        patch: { title: title.trim(), description, categoryId },
+        patch: { title: title.trim(), description, categoryId, image: image ?? undefined },
       });
       toast.success("Updated");
     } else {
